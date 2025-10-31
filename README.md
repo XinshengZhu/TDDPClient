@@ -20,15 +20,19 @@
 
 #### TDDP Packet Structure
 
-<img src="images/tddp_packet.png" alt="TDDP Packet Structure" width="500">
+<img src="images/tddp_packet.png" alt="TDDP Packet Structure" width="400">
 
 #### TDDP Header Structure
 
-<img src="images/tddp_header.png" alt="TDDP Header Structure" width="500">
+<img src="images/tddp_header.png" alt="TDDP Header Structure" width="400">
 
-#### TDDP Packet Construction Flow 
+#### TDDP Packet (Version 1) Construction Flow
 
-<img src="images/tddp_flow.png" alt="TDDP Packet Construction Flow" width="600">
+<img src="images/tddp_flow1.png" alt="TDDP Packet (Version 1) Construction Flow" width="500">
+
+#### TDDP Packet (Version 2) Construction Flow
+
+<img src="images/tddp_flow2.png" alt="TDDP Packet (Version 2) Construction Flow" width="600">
 
 ### 
 
