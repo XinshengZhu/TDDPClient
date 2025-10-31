@@ -215,8 +215,18 @@ class TDDPPacket:
 
         Returns:
             str: Formatted string showing all TDDPPacket object fields
+                  - For version 0x01: header + plain_data
+                  - For version 0x02: header + plain_data + encrypted_data
         """
-        return (
+        if self.header.version == 0x01:
+            return (
+                f"TDDPPacket("
+                f"header={self.header}, "
+                f"plain_data={self.plain_data}"
+                f")"
+            )
+        elif self.header.version == 0x02:
+            return (
             f"TDDPPacket("
             f"header={self.header}, "
             f"plain_data={self.plain_data}, "
