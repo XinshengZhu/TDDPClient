@@ -26,6 +26,20 @@
 
 <img src="images/tddp_header.png" alt="TDDP Header Structure" width="400">
 
+```
+struct tddp_header {
+  uint8_t version,       // protocol version 1 (0x01) or 2 (0x02)
+  uint8_t type,          // tddp_cmd_spCmd (0x03), tddp_heartbeat (0x04), or tddp_cmd_encCmd (0x07) for version 2
+  uint8_t code,          // 0x01 for request or 0x00 for reply
+  uint8_t reply_info,    // 0x00 for reply OK or 0x01 for reply ERROR
+  uint32_t pkt_length,   // num of bytes contained within TDDP data field (8-byte padded)
+  uint16_t pkt_id,       // same for a request and its corresponding reply, increment
+  uint8_t sub_type,      // subtype depending on type if using tddp_cmd_spCmd or tddp_cmd_encCmd for version 2
+  uint8_t reserve,       // 0x00
+  uint8_t[0x10] digest,  // MD5 digest of whole TDDP packet before DES encryption of TDDP data field for version 2
+}
+```
+
 #### TDDP Packet (Version 1) Construction Flow
 
 <img src="images/tddp_flow1.png" alt="TDDP Packet (Version 1) Construction Flow" width="500">
@@ -34,13 +48,9 @@
 
 <img src="images/tddp_flow2.png" alt="TDDP Packet (Version 2) Construction Flow" width="600">
 
-### 
+#### TDDP Command Summary
 
-
-
-###
-
-
+<img src="images/tddp_cmd.png" alt="TDDP Command Summary" width="600">
 
 ## Implementation of TDDP Client
 
@@ -61,7 +71,3 @@ TDDPClient/
     ```bash
     $ pip install pycryptodome
     ```
-
-### Examples
-
-
