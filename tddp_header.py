@@ -38,7 +38,12 @@ class TDDPHeader:
             sub_type (1 byte): Command sub-type field (default: 0x00)
             reserve (1 byte): Reserved field (default: 0x00)
             digest (16 bytes): MD5 digest field. If None, it will be set to 16 bytes of '\x00' (default: None)
+
+        Raises:
+            ValueError: If version is not 0x01 or 0x02
         """
+        if version not in [0x01, 0x02]:
+            raise ValueError("TDDPHeader init error: invalid version")
         self.version = version
         self.type = type
         self.code = code
@@ -47,7 +52,7 @@ class TDDPHeader:
         self.pkt_id = pkt_id
         self.sub_type = sub_type
         self.reserve = reserve
-        if digest is None:
+        if digest is None or version == 0x01:
             self.digest = b'\x00' * 16
         else:
             self.digest = digest
@@ -58,7 +63,12 @@ class TDDPHeader:
 
         Returns:
             bytes: Binary representation of the TDDPHeader object
+
+        Raises:
+            ValueError: If version is not 0x01 or 0x02
         """
+        if self.version not in [0x01, 0x02]:
+            raise ValueError(f"TDDPHeader pack error: invalid version 0x{self.version:02x}, must be 0x01 or 0x02")
         return struct.pack(
             self.STRUCT_FORMAT,
             self.version,
@@ -84,12 +94,13 @@ class TDDPHeader:
             TDDPHeader: TDDPHeader object populated from the binary representation
 
         Raises:
-            ValueError: If the data is smaller than the STRUCT_SIZE
+            ValueError: If the data is smaller than the STRUCT_SIZE or if version is not 0x01 or 0x02
         """
         if len(data) < cls.STRUCT_SIZE:
             raise ValueError(f"TDDPHeader unpack error: expected {cls.STRUCT_SIZE} bytes, got {len(data)} bytes")
-
         unpacked = struct.unpack(cls.STRUCT_FORMAT, data[:cls.STRUCT_SIZE])
+        if unpacked[0] not in [0x01, 0x02]:
+            raise ValueError(f"TDDPHeader unpack error: invalid version 0x{unpacked[0]:02x}, must be 0x01 or 0x02")
         return cls(
             version=unpacked[0],
             type=unpacked[1],
