@@ -84,8 +84,11 @@ class TDDPPacket:
         elif self.header.version == 0x02:
             if self.plain_data is None:
                 raise ValueError("TDDPPacket encrypt error: plain_data is not set for version 0x02")
-            cipher = DES.new(tddp_key, DES.MODE_ECB)
-            self.encrypted_data = cipher.encrypt(self.plain_data)
+            if self.header.pkt_length > 0:
+                cipher = DES.new(tddp_key, DES.MODE_ECB)
+                self.encrypted_data = cipher.encrypt(self.plain_data)
+            else:
+                self.encrypted_data = b''
 
     def decrypt(self, tddp_key: bytes):
         """
@@ -109,8 +112,11 @@ class TDDPPacket:
         elif self.header.version == 0x02:
             if self.encrypted_data is None:
                 raise ValueError("TDDPPacket decrypt error: encrypted_data is not set for version 0x02")
-            cipher = DES.new(tddp_key, DES.MODE_ECB)
-            self.plain_data = cipher.decrypt(self.encrypted_data)
+            if self.header.pkt_length > 0:
+                cipher = DES.new(tddp_key, DES.MODE_ECB)
+                self.plain_data = cipher.decrypt(self.encrypted_data)
+            else:
+                self.plain_data = b''
 
     def verify(self) -> bool:
         """
